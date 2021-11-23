@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter
+  labels:
+    app: counter
+  annotations:
+    class: dice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: counter
+  template:
+    metadata:
+      labels:
+        app: counter
+    spec:
+      containers:
+        - name: counter
+          image: busybox:1.33.1
+          args: [/bin/sh, -c,'i=0; while true; do echo "$i: $(date) Hi Attendees, I am a Pod created by a ReplicaSet created by a $(CONTROLLER)"; i=$((i+1)); sleep 5s; done']
+          env:
+          - name: CONTROLLER
+            value: Deployment
